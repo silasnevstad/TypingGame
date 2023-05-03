@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import './styles/TypingArea.css';
 
-const TypingArea = ({ sentence, remainingSentence, cursorPosition, attempt }) => {
+const TypingArea = ({ sentence, remainingSentence, cursorPosition, attempt, colors }) => {
 
     const remainingWords = remainingSentence.split(' ');
     let totalChars = 0;
@@ -35,6 +35,7 @@ const TypingArea = ({ sentence, remainingSentence, cursorPosition, attempt }) =>
                         key={charIndex}
                         ref={isCursor ? cursorRef : null}
                         className={`${isCursor ? 'cursor' : 'normal'}`}
+                        style={{ color: isCursor ? colors.highlight : undefined }}
                     >
                         {char}
                     </span>
@@ -51,7 +52,7 @@ const TypingArea = ({ sentence, remainingSentence, cursorPosition, attempt }) =>
             const isCorrect = attempt[charIndex] === char;
             const charClass = isCorrect ? (isSpace ? 'space-placeholder' : 'correct') : (isSpace ? 'space-wrong' : 'incorrect');
             return (
-                <span key={charIndex} className={charClass}>
+                <span key={charIndex} className={charClass} style={{ color: isCorrect ? colors.correct : colors.incorrect }}>
                     {char}
                 </span>
             );

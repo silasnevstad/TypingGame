@@ -44,26 +44,11 @@
 }
 
 .current-word {
-    /* font-weight: 800; */
     opacity: 1;
-}
-  
-.cursor {
-    /* background-color: #222; */
-    color: #F9A03F;
-    opacity: 2;
 }
 
 .normal {
     opacity: 0.6;
-}
-
-.correct {
-    color: #7FB069;
-}
-  
-.incorrect {
-    color: #C83E4D;
 }
 
 .space-wrong {

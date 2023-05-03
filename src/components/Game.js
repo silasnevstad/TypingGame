@@ -5,6 +5,7 @@ import Timer from './Timer';
 import InputHandler from './InputHandler';
 import Result from './Result';
 import Settings from './Settings';
+import ColorSettings from './ColorSettings';
 import words from './words.json';
 import './styles/Game.css';
 import refresh from '../images/refresh-ccw.svg';
@@ -49,7 +50,14 @@ class Game extends Component {
             accuracy: 0,
             wpm: 0,
             showSettings: false,
+            showColorSettings: false,
             alignment: 'block',
+            colors: {
+                correct: '#7FB069',
+                incorrect: '#C83E4D',
+                highlight: '#F9A03F',
+            },
+
         };
     }
 
@@ -101,7 +109,19 @@ class Game extends Component {
 
     toggleSettings = () => {
         this.setState((prevState) => {
-            return { showSettings: !prevState.showSettings };
+            return {
+                showSettings: !prevState.showSettings,
+                showColorSettings: false,
+            };
+        });
+    };
+
+    toggleColorSettings = () => {
+        this.setState((prevState) => {
+            return {
+                showSettings: false,
+                showColorSettings: !prevState.showColorSettings 
+            };
         });
     };
 
@@ -110,8 +130,10 @@ class Game extends Component {
         this.setState({ time });
     };
 
-    onColorChange = (color) => {
-        document.body.className = color;
+    handleColorChange = (color, index) => {
+        const colors = { ...this.state.colors };
+        colors[index] = color;
+        this.setState({ colors });
     };
 
     handleKeyPress = (e) => {
@@ -156,7 +178,7 @@ class Game extends Component {
         return (
             <div className="game">
                 <div className="utils-container">
-                    <Timer time={this.state.time} />
+                    <Timer time={this.state.time} colors={this.state.colors} />
                     <div className="button-container">
                         <button className="reset-button" onClick={this.reset}>
                             <img src={refresh} alt="reset" />
@@ -167,11 +189,12 @@ class Game extends Component {
                         <button className="align-button" onClick={this.toggleAlignment}>
                             <img src={this.state.alignment === 'line' ? menu : minus} alt="align" />
                         </button>
-                        <button className="color-button" onClick={this.toggleSettings}>
+                        <button className="color-button" onClick={this.toggleColorSettings}>
                             <img src={rgb} alt="color" />
                         </button>
                     </div>
                     <Settings show={this.state.showSettings} time={this.state.time} onTimeChange={this.onTimeChange} onColorChange={this.onColorChange} />
+                    <ColorSettings show={this.state.showColorSettings} colors={this.state.colors} onColorChange={this.handleColorChange} />
                 </div>
                 {this.state.alignment === 'line' ? (
                     <TypingArea
@@ -179,15 +202,14 @@ class Game extends Component {
                         remainingSentence={this.state.remainingSentence}
                         cursorPosition={this.state.cursorPosition}
                         attempt={this.state.attempt}
-                        alignment={this.state.alignment}
+                        colors={this.state.colors}
                     />
                 ) : (
                     <TypingAreaBlock
                         sentence={this.state.sentence}
-                        remainingSentence={this.state.remainingSentence}
                         cursorPosition={this.state.cursorPosition}
                         attempt={this.state.attempt}
-                        alignment={this.state.alignment}
+                        colors={this.state.colors}
                     />
                 )}
                 {this.state.time === 0 && (

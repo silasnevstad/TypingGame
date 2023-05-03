@@ -10,7 +10,7 @@
     white-space: pre-wrap;
     line-height: 3rem;
     max-height: 100%;
-    max-width: 70vw;
+    max-width: 80vw;
     overflow: auto;
 }
 
@@ -18,26 +18,14 @@
     padding: 10px;
     font-size: 1.8rem;
     font-family: 'Roboto', sans-serif;
-    font-weight: 600;
+    font-weight: 500;
     box-sizing: border-box;
     color: #f3f3f3;
     text-align: left;
 }
 
-.cursor {
-    color: #ffb74d;
-}
-
 .not-typed {
     opacity: 0.6;
-}
-
-.correct {
-    color: #81c784;
-}
-
-.incorrect {
-    color: #ef5350;
 }
 
 .space-wrong {

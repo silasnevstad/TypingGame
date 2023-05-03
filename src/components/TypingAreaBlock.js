@@ -1,11 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
 import './styles/TypingAreaBlock.css';
 
-const TypingAreaBlock = ({ sentence, cursorPosition, attempt }) => {
+const TypingAreaBlock = ({ sentence, cursorPosition, attempt, colors }) => {
     const cursorRef = useRef(null);
     const containerRef = useRef(null);
     const [displayedLineIndex, setDisplayedLineIndex] = useState(0);
-    const charsPerLine = 70;
+    const charsPerLine = Math.min(Math.floor(window.innerWidth / 10), 75);
 
     const splitSentenceIntoChunks = (text, chunkSize) => {
         const chunks = [];
@@ -46,11 +46,14 @@ const TypingAreaBlock = ({ sentence, cursorPosition, attempt }) => {
                         ? 'space-wrong'
                         : 'incorrect'
                     : isCursor ? '' : 'not-typed'
+                // get the color (if its cursor = highlight, if its not typed = undefined, if its correct = correct color, if its incorrect = incorrect color)
+                const color = isTyped ? (isCorrect ? colors.correct : colors.incorrect) : isCursor ? colors.highlight : undefined; 
                 return (
                     <span
                         key={charIndex}
                         ref={isCursor ? cursorRef : null}
                         className={`${charClass} ${isCursor ? 'cursor' : ''}`}
+                        style={{ color: color }}
                     >
                         {char}
                     </span>

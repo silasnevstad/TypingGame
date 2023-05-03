@@ -2,11 +2,13 @@
 import React from 'react';
 import './styles/Timer.css';
 
-const Timer = ({ time }) => {
+const Timer = ({ time, colors }) => {
     const seconds = time;
     return (
         <div className="timer-container">
-            <div className="timer">{`${seconds < 10 ? '0' : ''}${seconds}`}</div>
+            <div className="timer" style={{ color: colors.highlight }}>
+                {`${seconds < 10 ? '0' : ''}${seconds}`}
+            </div>
         </div>
     );
 };
