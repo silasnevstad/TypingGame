@@ -4,12 +4,14 @@ import TypingAreaBlock from './TypingAreaBlock';
 import Timer from './Timer';
 import InputHandler from './InputHandler';
 import Result from './Result';
+import Settings from './Settings';
 import words from './words.json';
 import './styles/Game.css';
-// import the refresh image from from ../images/refresh-ccw.svg
 import refresh from '../images/refresh-ccw.svg';
-import sliders from '../images/sliders.svg';
-import threeLines from '../images/align-justify.svg';
+import minus from '../images/minus.svg';
+import clock from '../images/clock.svg';
+import menu from '../images/menu.svg';
+import rgb from '../images/rgb.svg';
 
 function getRandomWord(maxLength = 10) {
     const word = words[Math.floor(Math.random() * words.length)];
@@ -33,7 +35,6 @@ function getRandomSentence() {
 }
 
 class Game extends Component {
-
     constructor(props) {
         super(props);
         const sentence = getRandomSentence();
@@ -98,6 +99,21 @@ class Game extends Component {
         this.setState({ alignment });
     };
 
+    toggleSettings = () => {
+        this.setState((prevState) => {
+            return { showSettings: !prevState.showSettings };
+        });
+    };
+
+    onTimeChange = (value) => {
+        const time = parseInt(value);
+        this.setState({ time });
+    };
+
+    onColorChange = (color) => {
+        document.body.className = color;
+    };
+
     handleKeyPress = (e) => {
         const { sentence, cursorPosition, time, gameStarted, alignment } = this.state;
         if (!gameStarted) {
@@ -145,13 +161,17 @@ class Game extends Component {
                         <button className="reset-button" onClick={this.reset}>
                             <img src={refresh} alt="reset" />
                         </button>
-                        <button className="utils-button">
-                            <img src={sliders} alt="settings" />
+                        <button className="time-button" onClick={this.toggleSettings}>
+                            <img src={clock} alt="settings" />
                         </button>
                         <button className="align-button" onClick={this.toggleAlignment}>
-                            <img src={threeLines} alt="settings" />
+                            <img src={this.state.alignment === 'line' ? menu : minus} alt="align" />
+                        </button>
+                        <button className="color-button" onClick={this.toggleSettings}>
+                            <img src={rgb} alt="color" />
                         </button>
                     </div>
+                    <Settings show={this.state.showSettings} time={this.state.time} onTimeChange={this.onTimeChange} onColorChange={this.onColorChange} />
                 </div>
                 {this.state.alignment === 'line' ? (
                     <TypingArea

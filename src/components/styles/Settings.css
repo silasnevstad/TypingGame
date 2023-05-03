@@ -1,0 +1,49 @@
+.settings-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 100;
+    margin-top: -10px;
+}
+
+.time-options {
+    display: flex;
+    gap: 8px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 1.8em;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+.time-option {
+    transition: all 0.3s ease;
+}
+
+.active {
+    opacity: .8;
+}
+
+.inactive {
+    opacity: 0.5;
+}
+  
+.time-option:hover {
+    opacity: 1;
+}
+  
+.settings-menu label {
+    color: #ddd;
+    display: inline-block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+  
+.settings-menu select {
+    width: 100%;
+    padding: 5px;
+    font-size: 14px;
+}
+  
