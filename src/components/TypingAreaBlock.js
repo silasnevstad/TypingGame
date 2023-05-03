@@ -5,7 +5,7 @@ const TypingAreaBlock = ({ sentence, cursorPosition, attempt, colors }) => {
     const cursorRef = useRef(null);
     const containerRef = useRef(null);
     const [displayedLineIndex, setDisplayedLineIndex] = useState(0);
-    const charsPerLine = Math.min(Math.floor(window.innerWidth / 10), 75);
+    const charsPerLine = Math.min(Math.floor(window.innerWidth / 15), 75);
 
     const splitSentenceIntoChunks = (text, chunkSize) => {
         const chunks = [];
