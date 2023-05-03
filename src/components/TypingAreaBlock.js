@@ -20,19 +20,26 @@ const TypingAreaBlock = ({ sentence, cursorPosition, attempt, colors }) => {
                     endIndex++;
                 }
             }
-            chunks.push(text.slice(index, endIndex));
+            const chunk = text.slice(index, endIndex).trim();
+            chunks.push(chunk);
             index = endIndex;
         }
+        for (let i = 0; i < chunks.length - 1; i++) {
+            chunks[i] = chunks[i] + " ";
+        }
         return chunks;
-    };
+    };  
 
     const sentenceChunks = splitSentenceIntoChunks(sentence, charsPerLine);
     const displayedChunks = sentenceChunks.slice(displayedLineIndex, displayedLineIndex + 3);
 
     const sentenceWithCursorAndColors = displayedChunks.map((chunk, chunkIndex) => (
         <div key={chunkIndex}>
-            {chunk.split('').map((char, charIndex) => {
-                const absoluteIndex = charsPerLine * (displayedLineIndex + chunkIndex) + charIndex;
+          {chunk.split('').map((char, charIndex) => {
+                const charsInPreviousChunks = sentenceChunks
+                    .slice(0, displayedLineIndex + chunkIndex)
+                    .reduce((sum, chunk) => sum + chunk.length, 0);
+                const absoluteIndex = charsInPreviousChunks + charIndex;
                 const isCursor = absoluteIndex === cursorPosition;
                 const isSpace = char === ' ';
                 const isTyped = absoluteIndex < attempt.length;
@@ -73,7 +80,7 @@ const TypingAreaBlock = ({ sentence, cursorPosition, attempt, colors }) => {
         };
 
         checkAndUpdateDisplayedLines();
-    }, [cursorPosition, attempt]);
+    }, [cursorPosition, attempt, charsPerLine, displayedLineIndex]);
 
     return (
         <div className="typing-area-block-container" ref={containerRef}>

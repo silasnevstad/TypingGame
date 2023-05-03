@@ -20,7 +20,7 @@ const TypingArea = ({ sentence, remainingSentence, cursorPosition, attempt, colo
 
     useEffect(() => {
         if (cursorRef.current && containerRef.current) {
-            const halfWidth = containerRef.current.offsetWidth / 2;
+            const halfWidth = containerRef.current.offsetWidth / 2 - cursorRef.current.offsetWidth / 2;
             const scrollLeft = cursorRef.current.offsetLeft - halfWidth + cursorRef.current.offsetWidth / 2;
             containerRef.current.style.transform = `translateX(-${scrollLeft}px)`;
         }
@@ -59,6 +59,8 @@ const TypingArea = ({ sentence, remainingSentence, cursorPosition, attempt, colo
         } else if (char === ' ' && charIndex === attempt.length) {
             return <span key={charIndex} className="space-placeholder">{' '}</span>;
         }
+
+        return;
     });
 
                 
