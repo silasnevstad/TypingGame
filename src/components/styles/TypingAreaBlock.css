@@ -1,0 +1,56 @@
+.typing-area-block-container {
+    position: relative;
+    overflow: hidden;
+    height: 3rem * 3;
+}
+
+.sentence-block-container {
+    display: flex;
+    flex-direction: column;
+    white-space: pre-wrap;
+    line-height: 3rem;
+    max-height: 100%;
+    max-width: 70vw;
+    overflow: auto;
+}
+
+.typing-area-block {
+    padding: 10px;
+    font-size: 1.8rem;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    box-sizing: border-box;
+    color: #f3f3f3;
+    text-align: left;
+}
+
+.cursor {
+    color: #ffb74d;
+}
+
+.not-typed {
+    opacity: 0.6;
+}
+
+.correct {
+    color: #81c784;
+}
+
+.incorrect {
+    color: #ef5350;
+}
+
+.space-wrong {
+    display: inline-block;
+    width: 0.6rem;
+    height: 1.2rem;
+    margin: 0 0.2rem;
+    margin-bottom: 0.2rem;
+    vertical-align: middle;
+}
+
+.space-placeholder {
+    display: inline-block;
+    min-width: 0.25em;
+    word-spacing: 0;
+}

@@ -1,23 +1,14 @@
-import logo from './logo.svg';
 import './App.css';
+// import TypingArea from './components/TypingArea';
+import Game from './components/Game';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <main className="App-sentence">
+        {/* <TypingArea sentence="Hello world bye said good bad sugar honey ice tea sister family country color from at the" cursorPosition={5} /> */}
+        <Game />
+      </main>
     </div>
   );
 }
