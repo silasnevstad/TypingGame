@@ -9,12 +9,16 @@ const Results = ({ accuracy, wpm, submitScore, submitted, updateSubmitted, updat
         return null;
     }
 
-    const handleSubmission = async (wpm, accuracy) => {
+    const handleSubmission = async () => {
+        if (!name) {
+            return;
+        }
         const docID = await submitScore(name, wpm, accuracy);
         if (docID) {
             updateSubmitted();
             updateLeaderboard();
-            setHighlightedEntry({name, wpm, accuracy});
+            const floatAcc = parseFloat(accuracy.toFixed(2));
+            setHighlightedEntry({ user: name, wpm: wpm, accuracy: floatAcc });
         }
     };
 
@@ -36,7 +40,7 @@ const Results = ({ accuracy, wpm, submitScore, submitted, updateSubmitted, updat
                     {showSubmission && (
                         <div className="results-submission-input">
                             <input className="submit-input" type="text" placeholder="Enter your name" value={name} onChange={(e) => setName(e.target.value)} />
-                            <button className="submit-button-small" onClick={() => handleSubmission(wpm, accuracy)}>Submit</button>
+                            <button className="submit-button-small" onClick={handleSubmission}>Submit</button>
                         </div>
                     )}
                 </>)}                

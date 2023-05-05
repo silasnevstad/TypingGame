@@ -20,8 +20,7 @@ const TypingArea = ({ sentence, remainingSentence, cursorPosition, attempt, colo
 
     useEffect(() => {
         if (cursorRef.current && containerRef.current) {
-            const halfWidth = containerRef.current.offsetWidth / 2 - cursorRef.current.offsetWidth / 2;
-            const scrollLeft = cursorRef.current.offsetLeft - halfWidth + cursorRef.current.offsetWidth / 2;
+            const scrollLeft = cursorRef.current.offsetLeft + cursorRef.current.offsetWidth / 2;
             containerRef.current.style.transform = `translateX(-${scrollLeft}px)`;
         }
     }, [cursorPosition, attempt]);

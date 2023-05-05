@@ -101,10 +101,17 @@ class Game extends Component {
     
         // Calculate accuracy based on the correct characters and the actual attempt length
         const accuracy = (correctChars / attempt.length) * 100;
+
+        const newHighlightedEntry = {
+            name: '',
+            wpm,
+            accuracy,
+        };
     
         this.setState({
             accuracy,
             wpm,
+            highlightedEntry: newHighlightedEntry,
         });
     };
 
@@ -163,7 +170,7 @@ class Game extends Component {
         this.setState({ leaderboard });
     };
 
-    updateLeaderboard = (name) => {
+    updateLeaderboard = () => {
         getLeaderboard().then((leaderboard) => {
             this.setState({ leaderboard });
         });
@@ -205,19 +212,57 @@ class Game extends Component {
         }
         const attempt = this.state.attempt + e.key;
         const remainingSentence = sentence.slice(attempt.length);
-        const correctChars = attempt.split('').filter((char, index) => char === sentence[index]).length;
-        const accuracy = (correctChars / attempt.length) * 100;
-        const wpm = (correctChars / 5) / ((30 - this.state.time) / 60);
         const cursorPos = alignment === 'block' ? cursorPosition + 1 : cursorPosition;
     
         this.setState({
             remainingSentence: remainingSentence,
             cursorPosition: cursorPos,
             attempt,
-            accuracy,
-            wpm,
         });
-    };    
+    };
+
+    handleKeyDown = (e) => {
+        const { sentence, cursorPosition, time, gameStarted, alignment } = this.state;
+        if (!gameStarted) {
+          this.startGame();
+        }
+      
+        if (e.key === 'Enter' || time === 0) {
+          return;
+        }
+
+        if (e.key === ' ') {
+            e.preventDefault(); // Prevent scrolling on spacebar press
+        }
+      
+        if (e.key === 'Backspace') {
+          // Handle backspace
+          const attempt = this.state.attempt.slice(0, -1);
+          const remainingSentence = sentence.slice(attempt.length);
+          const cursorPos = alignment === 'block' ? cursorPosition - 1 : cursorPosition;
+          this.setState({
+            remainingSentence: remainingSentence,
+            attempt: attempt,
+            cursorPosition: cursorPos,
+          });
+          return;
+        }
+        const attempt = this.state.attempt + e.key;
+        const remainingSentence = sentence.slice(attempt.length);
+        const cursorPos = alignment === 'block' ? cursorPosition + 1 : cursorPosition;
+      
+        this.setState({
+          remainingSentence: remainingSentence,
+          cursorPosition: cursorPos,
+          attempt,
+        });
+    };
+
+    handleKeyUp = (e) => {
+        if (e.key === ' ') {
+          e.preventDefault(); // Prevent scrolling on spacebar press
+        }
+    };
 
     render() {
         return (
@@ -275,7 +320,7 @@ class Game extends Component {
                         </p>
                     </div>
                 </div>
-                <InputHandler onKeyPress={this.handleKeyPress} />
+                <InputHandler onKeyDown={this.handleKeyDown} onKeyUp={this.handleKeyUp} />
             </div>
         );
     }

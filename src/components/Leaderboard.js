@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./styles/Leaderboard.css";
 import downArrow from "../images/arrow-down.svg";
 
@@ -6,24 +6,19 @@ const Leaderboard = ({ leaderboard, updateLeaderboard, highlightedEntry, colors 
     const [sortBy, setSortBy] = useState("wpm");
     const leaderboardLength = leaderboard.length;
 
-    useEffect(() => {
-        const sortedLeaderboard = [...leaderboard];
-        sortedLeaderboard.sort((a, b) => b[sortBy] - a[sortBy]);
-        updateLeaderboard(sortedLeaderboard);
-    }, [sortBy]);
-
     const handleSort = (field) => {
         setSortBy(field);
     };
 
-    const topEntries = leaderboard.slice(0, 10);
+    console.log(highlightedEntry)
+    console.log(leaderboard)
+
+    const sortedLeaderboard = [...leaderboard];
+    sortedLeaderboard.sort((a, b) => b[sortBy] - a[sortBy]);
+
+    const topEntries = sortedLeaderboard.slice(0, 10);
     const highlightedEntryRank = highlightedEntry
-        ? leaderboard.findIndex(
-              entry =>
-                  entry.user === highlightedEntry.name &&
-                  entry.wpm === highlightedEntry.wpm &&
-                  entry.accuracy === highlightedEntry.accuracy
-          ) + 1
+        ? sortedLeaderboard.findIndex((entry) => entry.user === highlightedEntry.name && entry.wpm === highlightedEntry.wpm && entry.accuracy === highlightedEntry.accuracy) + 1
         : null;
 
     const isHighlightedEntryInTop = highlightedEntry && highlightedEntryRank <= 10;
@@ -48,9 +43,10 @@ const Leaderboard = ({ leaderboard, updateLeaderboard, highlightedEntry, colors 
                     {topEntries.map((entry, index) => {
                         const isHighlighted =
                             highlightedEntry &&
-                            entry.user === highlightedEntry.name &&
+                            entry.user === highlightedEntry.user &&
                             entry.wpm === highlightedEntry.wpm &&
                             entry.accuracy === highlightedEntry.accuracy;
+                        // console.log(entry, highlightedEntry, isHighlighted)
                         const rank = isHighlighted && !isHighlightedEntryInTop ? highlightedEntryRank : index + 1;
 
                         return (

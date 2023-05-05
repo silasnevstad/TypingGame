@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
 
-const InputHandler = ({ onKeyPress }) => {
+const InputHandler = ({ onKeyDown, onKeyUp }) => {
   useEffect(() => {
-    window.addEventListener('keypress', onKeyPress);
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keyup', onKeyUp);
     return () => {
-      window.removeEventListener('keypress', onKeyPress);
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('keyup', onKeyUp);
     };
-  }, [onKeyPress]);
+  }, [onKeyDown, onKeyUp]);
 
   return null;
 };
