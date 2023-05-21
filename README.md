@@ -1,4 +1,6 @@
 # Typing Game
 
-A react web app typing game.
+A minimalistic and customizable react typing test web app.
+
+Firebase used for leaderboard.
 
