@@ -24,6 +24,11 @@
     text-align: left;
 }
 
+.cursor {
+    background-color: #555;
+    /* width: 0.3rem; */
+}
+
 .not-typed {
     opacity: 0.6;
 }

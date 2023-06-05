@@ -1,11 +1,14 @@
 import React, { useRef, useEffect, useState } from 'react';
 import './styles/TypingAreaBlock.css';
 
-const TypingAreaBlock = ({ sentence, cursorPosition, attempt, colors }) => {
+const TypingAreaBlock = ({ sentence, cursorPosition, attempt, previousAttemptWPM, colors }) => {
     const cursorRef = useRef(null);
+    const secondCursorRef = useRef(null);
     const containerRef = useRef(null);
     const [displayedLineIndex, setDisplayedLineIndex] = useState(0);
+    const [secondCursorPosition, setSecondCursorPosition] = useState(0);
     const charsPerLine = Math.min(Math.floor(window.innerWidth / 15), 75);
+
 
     const splitSentenceIntoChunks = (text, chunkSize) => {
         const chunks = [];
@@ -41,6 +44,7 @@ const TypingAreaBlock = ({ sentence, cursorPosition, attempt, colors }) => {
                     .reduce((sum, chunk) => sum + chunk.length, 0);
                 const absoluteIndex = charsInPreviousChunks + charIndex;
                 const isCursor = absoluteIndex === cursorPosition;
+                const isSecondCursor = absoluteIndex === secondCursorPosition;
                 const isSpace = char === ' ';
                 const isTyped = absoluteIndex < attempt.length;
                 const isCorrect = isTyped && attempt[absoluteIndex] === char;
@@ -59,7 +63,7 @@ const TypingAreaBlock = ({ sentence, cursorPosition, attempt, colors }) => {
                     <span
                         key={charIndex}
                         ref={isCursor ? cursorRef : null}
-                        className={`${charClass} ${isCursor ? 'cursor' : ''}`}
+                        className={`${charClass} ${isCursor ? 'cursor' : ''} ${isSecondCursor ? 'second-cursor' : ''}`}
                         style={{ color: color }}
                     >
                         {char}
@@ -81,6 +85,24 @@ const TypingAreaBlock = ({ sentence, cursorPosition, attempt, colors }) => {
 
         checkAndUpdateDisplayedLines();
     }, [cursorPosition, attempt, charsPerLine, displayedLineIndex]);
+
+    useEffect(() => {
+        const moveSecondCursor = () => {
+            if (secondCursorRef.current && containerRef.current) {
+                const lineIndex = Math.floor(secondCursorPosition / charsPerLine);
+                if (lineIndex > displayedLineIndex + 1) {
+                    setDisplayedLineIndex(lineIndex - 1);
+                }
+            }
+            setSecondCursorPosition(secondCursorPosition + 1);
+        };
+
+        const timer = setInterval(moveSecondCursor, previousAttemptWPM); // Move the second cursor at the speed of the previous attempt
+
+        return () => {
+            clearInterval(timer);
+        };
+    }, [previousAttemptWPM, displayedLineIndex, charsPerLine, secondCursorPosition]);
 
     return (
         <div className="typing-area-block-container" ref={containerRef}>

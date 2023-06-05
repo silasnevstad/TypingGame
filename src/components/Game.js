@@ -49,6 +49,7 @@ class Game extends Component {
             timeSetting: 30,
             timer: null,
             attempt: '',
+            previousAttemptWPM: 0,
             gameStarted: false,
             accuracy: 0,
             wpm: 0,
@@ -73,18 +74,24 @@ class Game extends Component {
     }
 
     startGame = () => {
+        const { attempt } = this.state;
         const timer = setInterval(() => {
+
             this.setState((prevState) => {
                 if (prevState.time === 0) {
                     clearInterval(prevState.timer);
                     this.showResults();
                 } else {
-                    return { time: prevState.time - 1 };
+                    return {
+                        time: prevState.time - 1,
+                        previousAttemptWPM: prevState.wpm,
+                    };
                 }
             });
         }, 1000);
         this.setState({ timer, gameStarted: true });
-    };
+      };
+      
 
     showResults = () => {
         const { sentence, attempt, timeSetting } = this.state;
@@ -124,12 +131,13 @@ class Game extends Component {
             time: this.state.timeSetting,
             timer: null,
             attempt: '',
+            // previousAttemptWPM: 0, // Clear the previous attempt
             accuracy: 0,
             wpm: 0,
             gameStarted: false,
             submitted: false,
         });
-    };
+      };
 
     toggleAlignment = () => {
         const alignment = this.state.alignment === 'line' ? 'block' : 'line';
@@ -265,6 +273,8 @@ class Game extends Component {
     };
 
     render() {
+        const { alignment, previousAttemptWPM } = this.state;
+        
         return (
             <div className="game">
                 <div className="utils-container">
@@ -277,7 +287,7 @@ class Game extends Component {
                             <img src={clock} alt="settings" />
                         </button>
                         <button className="align-button" onClick={this.toggleAlignment}>
-                            <img src={this.state.alignment === 'line' ? menu : minus} alt="align" />
+                            <img src={alignment === 'line' ? menu : minus} alt="align" />
                         </button>
                         <button className="color-button" onClick={this.toggleColorSettings}>
                             <img src={rgb} alt="color" />
@@ -287,12 +297,13 @@ class Game extends Component {
                     <ColorSettings show={this.state.showColorSettings} colors={this.state.colors} onColorChange={this.handleColorChange} />
                 </div>
                 <div className="main-container">
-                    {this.state.alignment === 'line' ? (
+                    {alignment === 'line' ? (
                         <TypingArea
                             sentence={this.state.sentence}
                             remainingSentence={this.state.remainingSentence}
                             cursorPosition={this.state.cursorPosition}
                             attempt={this.state.attempt}
+                            previousAttemptWPM={previousAttemptWPM}
                             colors={this.state.colors}
                         />
                     ) : (
@@ -300,6 +311,7 @@ class Game extends Component {
                             sentence={this.state.sentence}
                             cursorPosition={this.state.cursorPosition}
                             attempt={this.state.attempt}
+                            previousAttemptWPM={previousAttemptWPM}
                             colors={this.state.colors}
                         />
                     )}
